@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project Management Tool</h1>
+    <h2>Project List</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Project Number</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Profit</th>
+            <th>Time Taken</th>
+            <th>Actions</th>
+        </tr>
+        {% for project in projects %}
+        <tr>
+            <td>{{ project.id }}</td>
+            <td>{{ project.project_number }}</td>
+            <td>{{ project.title }}</td>
+            <td>{{ project.description }}</td>
+            <td>{{ project.profit }}</td>
+            <td>{{ project.time_taken }}</td>
+            <td>
+                <form action="{{ url_for('delete_project', project_id=project.id) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Add New Project</h2>
+    <form action="{{ url_for('add_project') }}" method="post">
+        <label for="project_number">Project Number:</label>
+        <input type="number" id="project_number" name="project_number" required><br>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required><br>
+        <label for="profit">Profit:</label>
+        <input type="number" id="profit" name="profit" required><br>
+        <label for="time_taken">Time Taken:</label>
+        <input type="number" id="time_taken" name="time_taken" required><br>
+        <button type="submit">Add Project</button>
+    </form>
+
+    <h2>Optimize Project Schedule</h2>
+    <form action="{{ url_for('optimize_projects') }}" method="post">
+        <label for="max_time">Max Time Available:</label>
+        <input type="number" id="max_time" name="max_time" required><br>
+        <button type="submit">Optimize</button>
+    </form>
+
+    {% if selected_projects %}
+    <h2>Selected Projects</h2>
+    <ul>
+        {% for project in selected_projects %}
+        <li>{{ project[2] }} (Profit: {{ project[3] }}, Time Taken: {{ project[4] }})</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
